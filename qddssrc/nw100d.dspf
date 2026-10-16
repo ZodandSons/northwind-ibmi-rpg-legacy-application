@@ -1,0 +1,137 @@
+     A* ********************************************************************
+     A* NW100D - Customer master maintenance          RKM 03/88
+     A* ********************************************************************
+     A* 06/94 DLW  added phone/fax checks
+     A* 11/99 JS   Y2K - dates still MMDDYY, window in program
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      PRINT
+     A                                      CF03(03 'Exit')
+     A                                      CF12(12 'Cancel')
+     A          R SFLREC                    SFL
+     A            S1OPT          1A  B  8  3
+     A                                      VALUES(' ' '2' '4' '5' '8' '9')
+     A            S1CUST         5A  O  8  7
+     A            S1NAME        30A  O  8 14
+     A            S1CITY        15A  O  8 46
+     A            S1CNTY        15A  O  8 63
+     A          R SFLCTL                    SFLCTL(SFLREC)
+     A                                      SFLSIZ(0500)
+     A                                      SFLPAG(0013)
+     A                                      CF06(06 'Add')
+     A                                      OVERLAY
+     A  31                                  SFLDSP
+     A  32                                  SFLDSPCTL
+     A  33                                  SFLCLR
+     A  34                                  SFLEND
+     A                                  1  2'NW100D'
+     A                                  1 26'Customer Master Maintenance'
+     A                                      DSPATR(HI)
+     A                                  1 72DATE
+     A                                      EDTCDE(Y)
+     A                                  2  2USER
+     A                                  2 72TIME
+     A                                  3  2'Position to name . .'
+     A            C1POS         20A  B  3 23
+     A                                  5  2'2=Change 4=Delete 5=Display'
+     A                                      COLOR(BLU)
+     A                                  5 30'8=Orders 9=Types'
+     A                                      COLOR(BLU)
+     A                                  7  2'Opt'
+     A                                      DSPATR(HI UL)
+     A                                  7  7'Cust'
+     A                                      DSPATR(HI UL)
+     A                                  7 14'Company name'
+     A                                      DSPATR(HI UL)
+     A                                  7 46'City'
+     A                                      DSPATR(HI UL)
+     A                                  7 63'Country'
+     A                                      DSPATR(HI UL)
+     A          R FMT01                     OVERLAY
+     A                                 22  2'F3=Exit   F6=Add   F12=Cancel'
+     A                                      COLOR(BLU)
+     A            MSGLIN        78A  O 23  2
+     A                                      DSPATR(HI)
+     A          R DTLREC
+     A                                  1  2'NW100D'
+     A                                  1 26'Customer Master Maintenance'
+     A                                      DSPATR(HI)
+     A                                  1 72DATE
+     A                                      EDTCDE(Y)
+     A                                  2  2USER
+     A                                  2 72TIME
+     A            D1MODE        10A  O  3  2
+     A                                      DSPATR(RI)
+     A                                  5  2'Customer no. . .'
+     A            D1CUST         5A  B  5 20
+     A  41                                  DSPATR(PR)
+     A  40                                  DSPATR(PR)
+     A  55                                  ERRMSG('Customer already exists' 55)
+     A  56                                  ERRMSG('Customer no. required' 56)
+     A                                  6  2'Company name . .'
+     A            D1NAME        40A  B  6 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A  51                                  ERRMSG('Company name required' 51)
+     A                                  7  2'Contact  . . . .'
+     A            D1CONT        30A  B  7 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                  8  2'Contact title  .'
+     A            D1TITL        30A  B  8 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                  9  2'Address  . . . .'
+     A            D1ADDR        60A  B  9 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 10  2'City . . . . . .'
+     A            D1CITY        15A  B 10 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 11  2'Region . . . . .'
+     A            D1REGN        15A  B 11 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 12  2'Postal code  . .'
+     A            D1POST        10A  B 12 20
+     A  41                                  DSPATR(PR)
+     A                                 13  2'Country  . . . .'
+     A            D1CNTY        15A  B 13 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A  53                                  ERRMSG('Country is required' 53)
+     A                                 14  2'Phone  . . . . .'
+     A            D1PHON        24A  B 14 20
+     A  41                                  DSPATR(PR)
+     A  54                                  ERRMSG('Phone has bad chars' 54)
+     A                                 15  2'Fax  . . . . . .'
+     A            D1FAX         24A  B 15 20
+     A  41                                  DSPATR(PR)
+     A  57                                  ERRMSG('Fax has bad chars' 57)
+     A                                 17  2'Created  . . . .'
+     A            D1CRDT         6Y 0O 17 20
+     A                                      EDTWRD('  /  /  ')
+     A                                 17 32'Changed'
+     A            D1CHDT         6Y 0O 17 40
+     A                                      EDTWRD('  /  /  ')
+     A                                 17 50'by'
+     A            D1CHUS        10A  O 17 53
+     A                                 22  2'F3=Exit   F12=Cancel'
+     A                                      COLOR(BLU)
+     A          R DLTREC
+     A                                  1  2'NW100D'
+     A                                  1 26'Customer Master Maintenance'
+     A                                      DSPATR(HI)
+     A                                  1 72DATE
+     A                                      EDTCDE(Y)
+     A                                  2  2USER
+     A                                  2 72TIME
+     A                                  6 10'Delete customer'
+     A                                      DSPATR(HI)
+     A            D2CUST         5A  O  6 26
+     A            D2NAME        40A  O  7 26
+     A                                 10 10'Are you sure (Y/N) ?'
+     A            D2CONF         1A  B 10 32
+     A                                      VALUES('Y' 'N')
+     A                                 22  2'F12=Cancel'
+     A                                      COLOR(BLU)

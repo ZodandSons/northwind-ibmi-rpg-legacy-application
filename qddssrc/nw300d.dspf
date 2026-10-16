@@ -1,0 +1,133 @@
+     A* ********************************************************************
+     A* NW300D - Supplier maintenance (copy of NW100D)  BJT 05/96
+     A* ********************************************************************
+     A                                      DSPSIZ(24 80 *DS3)
+     A                                      PRINT
+     A                                      REF(SUPMST)
+     A                                      CF03(03 'Exit')
+     A                                      CF12(12 'Cancel')
+     A          R SFLREC                    SFL
+     A            S1OPT          1A  B  8  3
+     A                                      VALUES(' ' '2' '4' '5')
+     A            S1SUP          5Y 0O  8  6
+     A                                      EDTCDE(Z)
+     A            S1NAME        30A  O  8 13
+     A            S1CITY        15A  O  8 45
+     A            S1CNTY        15A  O  8 62
+     A          R SFLCTL                    SFLCTL(SFLREC)
+     A                                      SFLSIZ(0500)
+     A                                      SFLPAG(0013)
+     A                                      CF06(06 'Add')
+     A                                      OVERLAY
+     A  31                                  SFLDSP
+     A  32                                  SFLDSPCTL
+     A  33                                  SFLCLR
+     A  34                                  SFLEND
+     A                                  1  2'NW300D'
+     A                                  1 26'Supplier Master Maintenance'
+     A                                      DSPATR(HI)
+     A                                  1 72DATE
+     A                                      EDTCDE(Y)
+     A                                  2  2USER
+     A                                  2 72TIME
+     A                                  3  2'Position to name . .'
+     A            C1POS         20A  B  3 23
+     A                                  5  2'Options: 2=Change  4=Delete'
+     A                                      COLOR(BLU)
+     A                                  5 31'5=Display'
+     A                                      COLOR(BLU)
+     A                                  7  2'Opt'
+     A                                      DSPATR(HI UL)
+     A                                  7  6'Supp#'
+     A                                      DSPATR(HI UL)
+     A                                  7 13'Company name'
+     A                                      DSPATR(HI UL)
+     A                                  7 45'City'
+     A                                      DSPATR(HI UL)
+     A                                  7 62'Country'
+     A                                      DSPATR(HI UL)
+     A          R FMT01                     OVERLAY
+     A                                 22  2'F3=Exit   F6=Add   F12=Cancel'
+     A                                      COLOR(BLU)
+     A            MSGLIN        78A  O 23  2
+     A                                      DSPATR(HI)
+     A          R DTLREC
+     A                                  1  2'NW300D'
+     A                                  1 26'Supplier Master Maintenance'
+     A                                      DSPATR(HI)
+     A                                  1 72DATE
+     A                                      EDTCDE(Y)
+     A                                  2  2USER
+     A                                  2 72TIME
+     A            D1MODE        10A  O  3  2
+     A                                      DSPATR(RI)
+     A                                  5  2'Supplier no. . .'
+     A            SMSUP#    R        B  5 20
+     A                                      EDTCDE(Z)
+     A  41                                  DSPATR(PR)
+     A  40                                  DSPATR(PR)
+     A                                  6  2'Company name . .'
+     A            SMNAME    R        B  6 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A  51                                  ERRMSG('Company name required' 51)
+     A                                  7  2'Contact  . . . .'
+     A            SMCONT    R        B  7 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                  8  2'Contact title  .'
+     A            SMTITL    R        B  8 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                  9  2'Address  . . . .'
+     A            SMADDR    R        B  9 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 10  2'City . . . . . .'
+     A            SMCITY    R        B 10 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 11  2'Region . . . . .'
+     A            SMREGN    R        B 11 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 12  2'Postal code  . .'
+     A            SMPOST    R        B 12 20
+     A  41                                  DSPATR(PR)
+     A                                 13  2'Country  . . . .'
+     A            SMCNTY    R        B 13 20
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A  53                                  ERRMSG('Country is required' 53)
+     A                                 14  2'Phone  . . . . .'
+     A            SMPHON    R        B 14 20
+     A  41                                  DSPATR(PR)
+     A  54                                  ERRMSG('Phone has bad chars' 54)
+     A                                 15  2'Fax  . . . . . .'
+     A            SMFAX     R        B 15 20
+     A  41                                  DSPATR(PR)
+     A  57                                  ERRMSG('Fax has bad chars' 57)
+     A                                 16  2'Home page  . . .'
+     A            SMHOME    R        B 17  2
+     A                                      CHECK(LC)
+     A  41                                  DSPATR(PR)
+     A                                 22  2'F3=Exit   F12=Cancel'
+     A                                      COLOR(BLU)
+     A          R DLTREC
+     A                                  1  2'NW300D'
+     A                                  1 26'Supplier Master Maintenance'
+     A                                      DSPATR(HI)
+     A                                  1 72DATE
+     A                                      EDTCDE(Y)
+     A                                  2  2USER
+     A                                  2 72TIME
+     A                                  6 10'Delete supplier'
+     A                                      DSPATR(HI)
+     A            D2SUP          5Y 0O  6 26
+     A                                      EDTCDE(Z)
+     A            D2NAME        40A  O  7 26
+     A                                 10 10'Are you sure (Y/N) ?'
+     A            D2CONF         1A  B 10 32
+     A                                      VALUES('Y' 'N')
+     A                                 22  2'F12=Cancel'
+     A                                      COLOR(BLU)

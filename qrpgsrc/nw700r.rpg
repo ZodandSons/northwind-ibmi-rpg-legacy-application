@@ -1,0 +1,42 @@
+      *****************************************************************
+      *  PROGRAM  : NW700R   (RPG/400 - NEVER CONVERTED)
+      *  TITLE    : CUSTOMER LIST BY COUNTRY
+      *  AUTHOR   : R. K. MILLER                     DATE: 11/02/88
+      *
+      *  RUN IN BATCH BY NW700C.  USES THE RPG CYCLE:
+      *    PRIMARY FILE CUSMSTL2 (COUNTRY/CITY/CUSTOMER)
+      *    L1 = CHANGE OF COUNTRY
+      *****************************************************************
+     H
+     FCUSMSTL2IPE E           K        DISK
+     FQSYSPRT O   F     132     OF     PRINTER
+     ICUSMSTR     01
+     I              CMCNTY                                L1
+     C   01                ADD  1         CNTRY   50
+     C   01                ADD  1         TOTAL   50
+     OQSYSPRT H  201   1P
+     O       OR        OF
+     O                         UDATE Y   10
+     O                                   40 'NORTHWIND TRADERS'
+     O                                   70 'CUSTOMER LIST BY COUNTRY'
+     O                                   76 'PAGE'
+     O                         PAGE  Z   80
+     OQSYSPRT H  2     1P
+     O       OR        OF
+     O                                    6 'CUST'
+     O                                   20 'COMPANY'
+     O                                   55 'CITY'
+     O                                   75 'COUNTRY'
+     O                                   78 'ST'
+     OQSYSPRT D  1     01
+     O                         CMCUST     6
+     O                         CMNAME    48
+     O                         CMCITY    64
+     O                         CMCNTY    80
+     O                         CMSTAT    82
+     OQSYSPRT T 12     L1
+     O                                   30 'CUSTOMERS IN COUNTRY'
+     O                         CNTRY ZB  40
+     OQSYSPRT T 1      LR
+     O                                   30 'TOTAL CUSTOMERS'
+     O                         TOTAL Z   40
